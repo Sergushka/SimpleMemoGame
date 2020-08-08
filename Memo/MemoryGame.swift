@@ -21,6 +21,11 @@ struct MemoryGame<CardContent> where CardContent: Equatable {
             }
         }
     }
+    var isGameOver: Bool {
+        get {
+            return cards.indices.filter { cards[$0].isMatched }.count == cards.count
+        }
+    }
     
     init(numberOfPairsOfCards: Int, cardContentGenerator: (Int) -> CardContent) {
         self.cards = Array<Card>()

@@ -10,10 +10,28 @@ import SwiftUI
 
 class EmojiMemoryGame: ObservableObject {
     @Published private var game: MemoryGame<String> = EmojiMemoryGame.createMemoryGame()
+    static var theme: Theme = Theme.allCases[Int.random(in: 0..<Theme.allCases.count)]
     
     static func createMemoryGame() -> MemoryGame<String> {
-        let emojis = ["👻","🧕🏿", "🥶", "💂‍♂️", "👩‍🎤","🧙‍♀️","🧶","🎩","🙉","🌚","🎱","🎁"].shuffled()
-        return MemoryGame<String>(numberOfPairsOfCards: Int.random(in: 2...5)) { pairIndex in
+        let emojis: [String]
+        theme = Theme.allCases[Int.random(in: 0..<Theme.allCases.count)]
+        
+        switch theme {
+            case .sport:
+                emojis = ["⚽️","🥎","🏀","🏈","🏐","🏅"]
+            case .animals:
+                emojis = ["🦙","🦛","🦝","🦘","🦚","🦜"]
+            case .halloween:
+                emojis = ["👹","👺","😈","🎃","👻","🥶"]
+            case .summer:
+                emojis = ["☀️","🌞","⛱","🍉","🀧","🌚"]
+            case .winter:
+                emojis = ["☃️","❄️","🎿","🏂","⛷","🀩"]
+            case .technology:
+                emojis = ["👩🏻‍💻","📀","⌚️","📱","📸","🕹"]
+        }
+        
+        return MemoryGame<String>(numberOfPairsOfCards: Int.random(in: 2..<emojis.count)) { pairIndex in
             return emojis[pairIndex]
         }
     }
@@ -28,5 +46,13 @@ class EmojiMemoryGame: ObservableObject {
     
     func choose(card: MemoryGame<String>.Card) {
         game.choose(card: card)
+    }
+    
+    func isGameOver() -> Bool {
+        game.isGameOver
+    }
+    
+    func startNewGame() -> Void {
+       game = EmojiMemoryGame.createMemoryGame()
     }
 }

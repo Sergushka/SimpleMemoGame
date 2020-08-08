@@ -12,14 +12,24 @@ struct ContentView: View {
     @ObservedObject var emojiGame: EmojiMemoryGame
     
     var body: some View {
-            Grid(emojiGame.cards) {card in
-                MyView(card: card).onTapGesture {
-                    self.emojiGame.choose(card: card)
+        Group {
+            if !emojiGame.isGameOver() {
+                Text(EmojiMemoryGame.theme.name.uppercased()).font(Font.title)
+                Grid(emojiGame.cards) {card in
+                    MyView(card: card).onTapGesture {
+                        self.emojiGame.choose(card: card)
+                    }
+                    .padding()
                 }
                 .padding()
+                
+            } else {
+                Button("Start New Game", action: {
+                    self.emojiGame.startNewGame()
+                })
+                    .font(Font.largeTitle)
             }
-            .padding()
-            .foregroundColor(Color.orange)
+        }.foregroundColor(EmojiMemoryGame.theme.color)
     }
 }
 
