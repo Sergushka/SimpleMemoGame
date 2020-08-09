@@ -19,10 +19,9 @@ struct ContentView: View {
                     MyView(card: card).onTapGesture {
                         self.emojiGame.choose(card: card)
                     }
-                    .padding()
-                }
-                .padding()
-                
+                        .padding()
+                    }
+                Text("SCORE: \(emojiGame.getScore())").font(Font.title)
             } else {
                 Button("Start New Game", action: {
                     self.emojiGame.startNewGame()

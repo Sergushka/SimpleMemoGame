@@ -26,6 +26,7 @@ struct MemoryGame<CardContent> where CardContent: Equatable {
             return cards.indices.filter { cards[$0].isMatched }.count == cards.count
         }
     }
+    var score: Int = 0
     
     init(numberOfPairsOfCards: Int, cardContentGenerator: (Int) -> CardContent) {
         self.cards = Array<Card>()
@@ -43,17 +44,30 @@ struct MemoryGame<CardContent> where CardContent: Equatable {
                 if self.cards[cardIndex].content == self.cards[lastFaceUpCardIndex].content {
                     self.cards[cardIndex].isMatched = true
                     self.cards[lastFaceUpCardIndex].isMatched = true
+                    addScore()
+                } else if self.cards[cardIndex].isSeen {
+                    penalizeScore()
                 }
                 self.cards[cardIndex].isFaceUp = true
             } else {
                 self.lastFaceUpCardIndex = cardIndex
             }
+            self.cards[cardIndex].isSeen = true
         }
+    }
+    
+    mutating func addScore() {
+        score += 2
+    }
+    
+    mutating func penalizeScore() {
+        score = max(0, score - 1)
     }
     
     struct Card: Identifiable {
         var isFaceUp: Bool = false
         var isMatched: Bool = false
+        var isSeen: Bool = false
         var content: CardContent
         var id: Int
     }
