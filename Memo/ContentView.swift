@@ -54,9 +54,9 @@ struct MyView: View {
     
     // MARK: -Constants
     
-    let cornerRadius: CGFloat = 10.0
-    let fontScaling: CGFloat = 0.8
-    let strokeLineWidth: CGFloat = 3
+    private let cornerRadius: CGFloat = 10.0
+    private let fontScaling: CGFloat = 0.8
+    private let strokeLineWidth: CGFloat = 3
 }
 
 struct ContentView_Previews: PreviewProvider {

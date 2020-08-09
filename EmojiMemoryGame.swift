@@ -12,7 +12,7 @@ class EmojiMemoryGame: ObservableObject {
     @Published private var game: MemoryGame<String> = EmojiMemoryGame.createMemoryGame()
     static var theme: Theme = Theme.allCases[Int.random(in: 0..<Theme.allCases.count)]
     
-    static func createMemoryGame() -> MemoryGame<String> {
+    private static func createMemoryGame() -> MemoryGame<String> {
         let emojis: [String]
         theme = Theme.allCases[Int.random(in: 0..<Theme.allCases.count)]
         
