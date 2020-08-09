@@ -12,7 +12,10 @@ struct ContentView: View {
     @ObservedObject var emojiGame: EmojiMemoryGame
     
     var body: some View {
-        Group {
+        bodyView().foregroundColor(EmojiMemoryGame.theme.color)
+    }
+    
+    @ViewBuilder private func bodyView() -> some View {
             if !emojiGame.isGameOver() {
                 Text(EmojiMemoryGame.theme.name.uppercased()).font(Font.title)
                 Grid(emojiGame.cards) {card in
@@ -28,7 +31,6 @@ struct ContentView: View {
                 })
                     .font(Font.largeTitle)
             }
-        }.foregroundColor(EmojiMemoryGame.theme.color)
     }
 }
 
@@ -37,30 +39,22 @@ struct MyView: View {
     
     var body: some View {
         GeometryReader { geometry in
-            ZStack {
-                if self.card.isFaceUp {
-                    RoundedRectangle(cornerRadius: self.cornerRadius).fill(Color.white)
-                    RoundedRectangle(cornerRadius: self.cornerRadius).stroke(lineWidth: self.strokeLineWidth)
-                    Text(self.card.content)
-                } else {
-                    if !self.card.isMatched {
-                        RoundedRectangle(cornerRadius: self.cornerRadius).fill()
-                    }
-                }
+            if self.card.isFaceUp || !self.card.isMatched {
+                ZStack {
+                    Pie(startAngle: Angle(degrees: -90), endAngle: Angle(degrees: 110-90)).padding(5).opacity(0.4)
+                    Text(self.card.content).font(Font.system(size: min(geometry.size.width, geometry.size.height) * self.fontScaling))
+                }.cardify(isFaceUp: self.card.isFaceUp)
             }
-            .font(Font.system(size: min(geometry.size.width, geometry.size.height) * self.fontScaling))
         }
     }
     
-    // MARK: -Constants
-    
-    private let cornerRadius: CGFloat = 10.0
     private let fontScaling: CGFloat = 0.8
-    private let strokeLineWidth: CGFloat = 3
 }
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView(emojiGame: EmojiMemoryGame())
+        let game = EmojiMemoryGame()
+        game.choose(card: game.cards[0])
+        return ContentView(emojiGame: game)
     }
 }

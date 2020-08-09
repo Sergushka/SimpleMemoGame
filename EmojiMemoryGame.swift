@@ -24,14 +24,14 @@ class EmojiMemoryGame: ObservableObject {
             case .halloween:
                 emojis = ["👹","👺","😈","🎃","👻","🥶"]
             case .summer:
-                emojis = ["☀️","🌞","⛱","🍉","🀧","🌚"]
+                emojis = ["☀️","🌞","⛱","🍉","🥭","🌚"]
             case .winter:
-                emojis = ["☃️","❄️","🎿","🏂","⛷","🀩"]
+                emojis = ["☃️","❄️","🎿","🏂","⛷","🌨"]
             case .technology:
                 emojis = ["👩🏻‍💻","📀","⌚️","📱","📸","🕹"]
         }
         
-        return MemoryGame<String>(numberOfPairsOfCards: Int.random(in: 2...4)) { pairIndex in
+        return MemoryGame<String>(numberOfPairsOfCards: emojis.count) { pairIndex in
             return emojis[pairIndex]
         }
     }
