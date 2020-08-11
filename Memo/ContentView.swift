@@ -20,18 +20,22 @@ struct ContentView: View {
                 Text(EmojiMemoryGame.theme.name.uppercased()).font(Font.title)
                 Grid(emojiGame.cards) {card in
                     MyView(card: card).onTapGesture {
-                        self.emojiGame.choose(card: card)
+                        withAnimation(.linear(duration: self.animationDuration)) {
+                            self.emojiGame.choose(card: card)
+                        }
                     }
                         .padding()
                     }
                 Text("SCORE: \(emojiGame.getScore())").font(Font.title)
             } else {
-                Button("Start New Game", action: {
+                Button(action: {
                     self.emojiGame.startNewGame()
-                })
+                }, label: { Text("Start New Game") })
                     .font(Font.largeTitle)
             }
     }
+    
+    private let animationDuration = 0.75
 }
 
 struct MyView: View {
@@ -41,14 +45,21 @@ struct MyView: View {
         GeometryReader { geometry in
             if self.card.isFaceUp || !self.card.isMatched {
                 ZStack {
-                    Pie(startAngle: Angle(degrees: -90), endAngle: Angle(degrees: 110-90)).padding(5).opacity(0.4)
-                    Text(self.card.content).font(Font.system(size: min(geometry.size.width, geometry.size.height) * self.fontScaling))
-                }.cardify(isFaceUp: self.card.isFaceUp)
+                    Pie(startAngle: Angle(degrees: -90), endAngle: Angle(degrees: 110-90)).padding(self.piePadding).opacity(self.pieOpacity)
+                    Text(self.card.content)
+                        .font(Font.system(size: min(geometry.size.width, geometry.size.height) * self.fontScaling))
+                        .rotationEffect(Angle.degrees(self.card.isMatched ? 360 : 0))
+                        .animation(self.card.isMatched ? Animation.linear(duration: 1.5).repeatForever(autoreverses: false) : .default)
+                }
+                    .cardify(isFaceUp: self.card.isFaceUp)
+                    .transition(.scale)
             }
         }
     }
     
     private let fontScaling: CGFloat = 0.8
+    private let piePadding: CGFloat = 5
+    private let pieOpacity = 0.4
 }
 
 struct ContentView_Previews: PreviewProvider {

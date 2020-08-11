@@ -40,7 +40,7 @@ enum Theme: CaseIterable {
         case .halloween:
             return .red
         case .sport:
-            return .black
+            return .primary
         case .summer:
             return .green
         case .technology:
